@@ -1,6 +1,7 @@
-# dockerでlsd-slamしたい
+# DockerでLSD-SLAMしたい
 [CHItAさんのgithub repository](https://github.com/CHItA/ros-docker)を使ってやってみる。
 
+## LSD-SLAM用のイメージののbuild
 ```
 git clone https://github.com/CHItA/ros-docker.git
 cd ros-docker/images/ros-indigo
@@ -23,14 +24,15 @@ sudo docker tag ros-indigo:latest ros-indigo-chita:latest
 sudo docker rmi ros-indigo
 sudo docker images
 ```
-
-次に、lsd-slam用のimageを作成する。
+## LSD-SLAMイメージののbuild
+次に、LSD-SLAM用のimageを作成する。
 ```
 cd ../lsd-slam/
 sudo docker build -t lsd-slam:latest .
 ```
 先ほど作成したros-indigoのイメージをros-indigo-chitaにした場合は、DockerfileのFROMも書き直す必要がある。  
 
+## LSD-SLAMのサンプルデータを再生
 docker runさせ、
 ```
 sudo docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix lsd-slam /bin/bash
@@ -42,4 +44,19 @@ rosrun lsd_slam_viewer viewer
 ```
 
 たしかに、Docker上のROSからGUI画面が出た！！  
-しかし、なにも映らない。
+これだけだと、画面が出るだけなので、viewerもバックグラウンド実行させ、slam_coreもバックグラウンド実行させ、rosbagでデータを再生してみた。
+
+```
+sudo apt update
+sudo apt install wget## LSD-SLAMイメージののbuild
+cd
+wget http://vmcremers8.informatik.tu-muenchen.de/lsd/LSD_room.bag.zip
+roscore > /dev/null &
+rosrun lsd_slam_viewer viewer &
+rosrun lsd_slam_core live_slam image:=/image_raw camera_info:=/camera_info &
+rosbag play ~/LSD_room.bag
+```
+
+
+このあとは、[モツさんのブログ](https://noshumi.blogspot.jp/2016/12/lsd-slamros2.html)
+を参考にしつつカメラを認識させたい。
