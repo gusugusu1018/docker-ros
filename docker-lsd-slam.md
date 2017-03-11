@@ -16,13 +16,30 @@ gpg: keyserver receive failed: keyserver error
 ```
 セキュリティーの関係か、違うネットワークに属す、違うPCでは実行できた。  
 このbuildではpureなubuntu:trustyからすべて環境構築をしているので、とても長い。  
-みると、openCVをbuildしているから長いよう。  
 
-Dockerfileの書き方がとても参考になる。  
-
-buildができると、これはros-indigo:latestとなるが、これをros-indigo-chita:latestと直したい。  
+buildができると、このイメージはros-indigo:latestとなるが、これをros-indigo-chita:latestと直したいときは以下のようにする。  
 ```
 sudo docker tag ros-indigo:latest ros-indigo-chita:latest
 sudo docker rmi ros-indigo
 sudo docker images
 ```
+
+次に、lsd-slam用のimageを作成する。
+```
+cd ../lsd-slam/
+sudo docker build -t lsd-slam:latest .
+```
+先ほど作成したros-indigoのイメージをros-indigo-chitaにした場合は、DockerfileのFROMも書き直す必要がある。  
+
+docker runさせ、
+```
+sudo docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix lsd-slam /bin/bash
+```
+roscoreし、rosrunできれば成功のはずだが、、、
+```
+roscore > /dev/null &
+rosrun lsd_slam_viewer viewer
+```
+
+たしかに、Docker上のROSからGUI画面が出た！！  
+しかし、なにも映らない。
