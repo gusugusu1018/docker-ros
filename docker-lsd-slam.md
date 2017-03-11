@@ -19,3 +19,10 @@ gpg: keyserver receive failed: keyserver error
 みると、openCVをbuildしているから長いよう。  
 
 Dockerfileの書き方がとても参考になる。  
+
+buildができると、これはros-indigo:latestとなるが、これをros-indigo-chita:latestと直したい。  
+```
+sudo docker tag ros-indigo:latest ros-indigo-chita:latest
+sudo docker rmi ros-indigo
+sudo docker images
+```
