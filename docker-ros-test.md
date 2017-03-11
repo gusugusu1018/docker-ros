@@ -5,33 +5,52 @@
 sudo docker run -h master -it --rm --name master --env ROS_HOSTNAME=master osrf/ros:indigo-desktop-full roscore
 ```
 
+これだとipがわからなかったので、一度bashを開いて、ifconfigしてから、roscoreする。
 ```
 sudo docker run -h master -it --rm --name master --env ROS_HOSTNAME=master osrf/ros:indigo-desktop-full  
 ifconfig  
 roscore  
 ```
+talkerとlistenerも同様にやるが、このようなやり方だと少し苦労する。  
 
-## talker
-```
-sudo docker run  --add-host="master:masterのIPアドレス" -h talker -it --rm --name talker --env ROS_HOSTNAME=talker --env ROS_MASTER_URI=http://master:11311 osrf/ros:indigo-desktop-full talker  
-```
+# docker network create rosnet
+こちらの方法だとネットワーク周りが少し楽にできる。  
+まず、tutorial用のDockerfileをつくって、buildする。  
 
+Dockerfileをテストのディレクトリに置く。  
 ```
-sudo docker run  --add-host="master:master address" -h talker -it --rm --name talker --env ROS_HOSTNAME=talker --env ROS_MASTER_URI=http://master:11311 osrf/ros:indigo-desktop-full  
-ifconfig  
-talker
+FROM ros:indigo
+# install ris tutorials packages
+RUN apt-get update && apt-get install -y
+RUN apt-get install -y ros-indigo-ros-tutorials ros-indigo-common-tutorials && rm -rf /var/lib/opt/lists
 ```
-
-## listener
+ディレクトリ内でdocker build
 ```
-sudo docker run -it -h listener --add-host="master:masterのIPアドレス" --add-host="talker:talkerのIPアドレス" --rm --name listener --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 osrf/ros:indigo-desktop-full listener
-```
-
-```
-sudo docker run -it -h listener --add-host="master:master address" --add-host="talker:talker address" --rm --name listener --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 osrf/ros:indigo-desktop-full  
-ifconfig  
-listener  
+sudo docker build -t ros:ros-tutorials .
 ```
 
-ROSは内部でネットワークが必要になる。  
-よってこのようなやり方だと少し苦労する。  
+-tはtagのtで、rosリポジトリのros-tutorialsというタグのイメージができる。  
+```
+sudo docker images
+```
+次に、rosnetを作成する。
+```
+sudo docker network create rosnet
+```
+docker runでは--net rosnetのようにすると、コンテナを同じネットワークに入れることができる。いちいちifconfigみたいにしなくてもよい。  
+
+まず、roscoreを実行  
+```
+sudo docker run -it --rm --net rosnet --name master ros:ros-tutorials roscore 
+```
+
+次に、talkerを実行  
+```
+sudo docker run -it --rm --net rosnet --name talker ros:ros-tutorials --env ROS_HOSTNAME=talker --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials talker
+```
+
+最後にlistenerを実行
+```
+sudo docker run -it --rm --net rosnet --name listener ros:ros-tutorials --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials listener
+```
+

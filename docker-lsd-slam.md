@@ -14,4 +14,8 @@ gpg: requesting key B01FA116 from hkp server ha.pool.sks-keyservers.net
 gpg: keyserver timed out
 gpg: keyserver receive failed: keyserver error
 ```
+セキュリティーの関係か、違うネットワークに属す、違うPCでは実行できた。  
+このbuildではpureなubuntu:trustyからすべて環境構築をしているので、とても長い。  
+みると、openCVをbuildしているから長いよう。  
 
+Dockerfileの書き方がとても参考になる。  

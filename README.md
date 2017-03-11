@@ -10,8 +10,10 @@ sudo apt update
 sudo apt-get install docker-ce
 apt-cache madison docker-ce
 ```
-## dockerをテスト
+## docker test
+```
 sudo docker run hello-world
+```
 
 ## docker pull ros
 ```
