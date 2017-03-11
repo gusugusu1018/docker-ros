@@ -1,4 +1,6 @@
 # docker ros
+I'm beginner of ros and docker.  
+This is just memo for these.  
 
 ## docker install
 ```
