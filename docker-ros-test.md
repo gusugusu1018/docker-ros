@@ -1,4 +1,10 @@
-# docker rosあまりよくない方法
+# docker test
+1. docker rosあまりよくない方法
+2. docker network create rosnet
+3. docker with tmux
+4. rviz
+
+1. docker rosあまりよくない方法
 以下試してみてもいいが、結構コマンドがめんどい。    
 ## docker run roscore
 ```
@@ -28,7 +34,7 @@ sudo docker run -it -h listener --add-host="master:masterのIPアドレス" --ad
 ```
 talkerとlistenerも同様にやるが、このようなやり方だと少し苦労する。  
 
-# docker network create rosnet
+2. docker network create rosnet
 こちらの方法だとネットワーク周りが少し楽にできる。  
 ## Dockerfileを書く
 まず、tutorial用のDockerfileをつくって、buildする。  
@@ -70,5 +76,29 @@ sudo docker run -it --rm --net rosnet --name talker ros:ros-tutorials --env ROS_
 最後にlistenerを実行
 ```
 sudo docker run -it --rm --net rosnet --name listener ros:ros-tutorials --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials listener
+```
+3. docker with tmux
+
+```
+sudo docker run -it --rm ros:ros-tutorials
+apt update
+apt install -y tmux
+tmux
+# C-b % # virtual split
+# C-b " # split
+# C-b q 0 or 1 or 2# move to any pain
+roscore
+rosrun roscpp_tutorials listener
+rosrun roscpp_tutorials talker
+```
+
+4. rviz
+
+```
+sudo docker network create rosnet
+sudo docker run -it --rm --net rosnet --name master --env ROS_HOSTNAME=master osrf/ros:indigo-desktop-full roscore
+xhost +
+# clients can connect from any host
+sudo docker run -it --rm --net rosnet --name rviz --env ROS_HOSTNAME=rviz --env ROS_MASTER_URI=http://master:11311 --env DISPLAY=unix$DISPLAY --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" osrf/ros:indigo-desktop-full rosrun rviz rviz
 ```
 
