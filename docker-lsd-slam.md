@@ -57,6 +57,13 @@ rosrun lsd_slam_core live_slam image:=/image_raw camera_info:=/camera_info &
 rosbag play ~/LSD_room.bag
 ```
 
-
-このあとは、[モツさんのブログ](https://noshumi.blogspot.jp/2016/12/lsd-slamros2.html)
-を参考にしつつカメラを認識させたい。
+## lsd_slam_core
+```
+sudo docker run -it --rm --net rosnet --name master --env ROS_HOSTNAME=master --env ROS_MASTER_URI=http://master:11311 --env DISPLAY=unix$DISPLAY --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --device=/dev/video0 lsd-slam bash
+sudo apt update
+sudo apt install ros-indigo-camera-umd tmux
+roscore
+rosrun lsd_slam_viewer viewer
+rosrun uvc_camera uvc_camera_node 
+rosrun lsd_slam_core live_slam /image:=/image_raw /camera_info:=/camera_info
+```
