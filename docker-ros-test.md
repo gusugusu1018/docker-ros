@@ -43,15 +43,17 @@
 
     Dockerfileをテストのディレクトリに置く。  
     ```
-    FROM ros:indigo
-    # install ris tutorials packages
-    RUN apt-get update && apt-get install -y
-    RUN apt-get install -y ros-indigo-ros-tutorials ros-indigo-common-tutorials && rm -rf /var/lib/opt/lists
+    FROM osrf/ros:indigo-desktop-full
+    # install ros tutorials packages
+    RUN apt-get update && apt-get install -y \
+      ros-indigo-ros-tutorialsi \
+      ros-indigo-common-tutorials \
+      && rm -rf /var/lib/opt/lists
     ```
     ## docker build
     ディレクトリ内でdocker build
     ```
-    sudo docker build -t ros:ros-tutorials .
+    sudo docker build -t minaki/ros:ros-tutorials .
     ```
 
     -tはtagのtで、rosリポジトリのros-tutorialsというタグのイメージができる。  
@@ -67,17 +69,17 @@
     ## docker run roscore
     まず、roscoreを実行  
     ```
-    sudo docker run -it --rm --net rosnet --name master ros:ros-tutorials roscore 
+    sudo docker run -it --rm --net rosnet --name master minaki/ros:ros-tutorials roscore 
     ```
     ## docker run talker
     次に、talkerを実行  
     ```
-    sudo docker run -it --rm --net rosnet --name talker ros:ros-tutorials --env ROS_HOSTNAME=talker --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials talker
+    sudo docker run -it --rm --net rosnet --name talker minaki/ros:ros-tutorials --env ROS_HOSTNAME=talker --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials talker
     ```
     ## docker run listener
     最後にlistenerを実行
     ```
-    sudo docker run -it --rm --net rosnet --name listener ros:ros-tutorials --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials listener
+    sudo docker run -it --rm --net rosnet --name listener minaki/ros:ros-tutorials --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials listener
     ```
 3. docker with tmux
 
