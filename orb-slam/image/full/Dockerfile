@@ -14,8 +14,13 @@ RUN apt-get update && apt-get install -y\
 RUN git clone https://github.com/minaminoki/.dotfiles.git ~/.dotfiles
 RUN curl -sL zplug.sh/installer | zsh
 RUN cd && curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh && \
-      sh ./install.sh
+      sh ./install.shi && rm install.sh
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
      ~/.fzf/install
 RUN chmod +x ~/.dotfiles/ln.sh && sh ~/.dotfiles/ln.sh
+
+# add path
+RUN echo "export ROS_PACKAGE_PATH=~/ORB_SLAM:$ROS_PACKAGE_PATH" >> ~/.zshrc && \
+      echo "source /opt/ros/indigo/setup.zsh" >> ~/.zshrc && \
+     /bin/bash -c "source ~/.zshrc"
 

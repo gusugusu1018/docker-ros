@@ -11,12 +11,15 @@ help:
 
 build:
 	@docker build --tag=minaki/ros:core core/.
-	@docker build --tag=minaki/orb-slam:base orb-slam/.
+	@docker build --tag=minaki/orb-slam:base base/.
+	@docker build --tag=minaki/orb-slam:full full/.
 
 pull:
 	@docker pull minaki/ros:core
 	@docker pull minaki/orb-slam:base
+	@docker pull minaki/orb-slam:full
 
 clean:
 	@docker rmi -f minaki/ros:core
 	@docker rmi -f minaki/orb-slam:base
+	@docker rmi -f minaki/orb-slam:full
