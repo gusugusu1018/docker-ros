@@ -6,7 +6,7 @@
     5. docker commit ros with tmux image
     6. camera
 
-1. docker rosあまりよくない方法  
+#1. docker rosあまりよくない方法  
     以下試してみてもいいが、結構コマンドがめんどい。    
     ## docker run roscore
     ```
@@ -36,7 +36,7 @@
     ```
     talkerとlistenerも同様にやるが、このようなやり方だと少し苦労する。  
 
-2. docker network create rosnet
+#2. docker network create rosnet
     こちらの方法だとネットワーク周りが少し楽にできる。  
     ## Dockerfileを書く
     まず、tutorial用のDockerfileをつくって、buildする。  
@@ -81,8 +81,8 @@
     ```
     sudo docker run -it --rm --net rosnet --name listener minaki/ros:ros-tutorials --env ROS_HOSTNAME=listener --env ROS_MASTER_URI=http://master:11311 rostutorials rosrun roscpp-tutorials listener
     ```
-3. docker with tmux
-
+#3. docker with tmux
+  * terminal multiprexerを使って一つのコンテナで複数のプロセスを実行させる。
     ```
     sudo docker run -it --rm ros:ros-tutorials
     apt update
@@ -96,8 +96,8 @@
     rosrun roscpp_tutorials talker
     ```
 
-4. rviz
-
+#4. rviz
+  * Rvizを実行をしてみる。
     ```
     sudo docker network create rosnet
     sudo docker run -it --rm --net rosnet --name master --env ROS_HOSTNAME=master osrf/ros:indigo-desktop-full roscore
@@ -106,7 +106,8 @@
     sudo docker run -it --rm --net rosnet --name rviz --env ROS_HOSTNAME=rviz --env ROS_MASTER_URI=http://master:11311 --env DISPLAY=unix$DISPLAY --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" osrf/ros:indigo-desktop-full rosrun rviz rviz
     ```
 
-5. docker commit ros with tmux image
+#5. docker commit ros with tmux image
+  * how to docker commit
     ```
     sudo docker run -it --name with-tmux osrf/ros:indigo-desktop-full bash
     apt update 
@@ -116,7 +117,7 @@
     sudo docker commit with-tmux osrf/ros:withtmux
     sudo docker images
     ```
-
+  * turtlesimを走らせてみる
     turtlesim test
     ```
     sudo docker run -it --rm --net rosnet --name master --env ROS_HOSTNAME=master --env ROS_MASTER_URI=http://master:11311 --env DISPLAY=unix$DISPLAY --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" osrf/ros:withtmux bash
@@ -131,7 +132,8 @@
     rosrun turtlesim turtle_teleop_key
     ```
 
-6. camera
+#6. camera
+  * usb deviceをdocker上で使ってみる。
     ```
     sudo chmod a+rw /dev/video0
     sudo docker run -it --rm --net rosnet --name master --env ROS_HOSTNAME=master --env ROS_MASTER_URI=http://master:11311 --env DISPLAY=unix$DISPLAY --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --device=/dev/video0 osrf/ros:withtmux bash
