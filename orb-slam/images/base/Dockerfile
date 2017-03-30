@@ -8,7 +8,7 @@ WORKDIR /
 
 # install packages for my env
 RUN apt-get update && apt-get install -y\
-     tmux
+     tmux vim
 
 # clone my env
 RUN git clone https://github.com/minaminoki/.dotfiles.git ~/.dotfiles
