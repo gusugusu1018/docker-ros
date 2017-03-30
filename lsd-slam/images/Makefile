@@ -11,9 +11,12 @@ help:
 
 build:
 	@docker build --tag=minaki/lsd-slam:core core/.
+	@docker build --tag=minaki/lsd-slam:base base/.
 
 pull:
 	@docker pull minaki/lsd-slam:core
+	@docker pull minaki/lsd-slam:base
 
 clean:
 	@docker rmi -f minaki/lsd-slam:core
+	@docker rmi -f minaki/lsd-slam:base
