@@ -1,4 +1,4 @@
-# mianki/orb_slam:base
+# mianki/orb_slam:core
 # 
 #
 #

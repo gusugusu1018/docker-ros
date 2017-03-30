@@ -6,6 +6,12 @@ FROM minaki/orb-slam:base
 
 WORKDIR /root/
 
+
+RUN mkdir ~/ORB_SLAM/build
+RUN cd ~/ORB_SLAM/build && \
+      /bin/bash -c "cmake .. -DROS_BUILD_TYPE=Release " && \
+      make
+
 # calibration
 RUN rosdep install camera_calibration && rosmake camera_calibration
 # manualy
