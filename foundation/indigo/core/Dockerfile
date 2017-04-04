@@ -7,7 +7,7 @@ FROM osrf/ros:indigo-desktop-full
 WORKDIR /
 RUN cd /
 
-# install opencv2.4.8
+# install opencv2.4.11
 RUN apt-get update && apt-get install -y \
       libopencv-dev build-essential checkinstall \
       cmake pkg-config yasm libtiff5-dev libjpeg-dev \
@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN cd && mkdir opencv && cd opencv && \
       git clone https://github.com/Itseez/opencv.git && \
-      cd opencv && git checkout tags/2.4.8 && \
+      cd opencv && git checkout tags/2.4.11 && \
       mkdir build && cd build && \
       cmake -D CMAKE_BUILD_TYPE=RELEASE \
         -D CMAKE_INSTALL_PREFIX=/usr/local \
