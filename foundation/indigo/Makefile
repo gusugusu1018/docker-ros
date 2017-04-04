@@ -10,10 +10,10 @@ help:
 	@echo ""
 
 build:
-	@docker build --tag=minaki/ros:core core/.
+	@docker build --tag=minaki/ros-indigo:core core/.
 
 pull:
-	@docker pull minaki/ros:core
+	@docker pull minaki/ros-indigo:core
 
 clean:
-	@docker rmi -f minaki/ros:core
+	@docker rmi -f minaki/ros-indigo:core
