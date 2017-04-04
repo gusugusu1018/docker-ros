@@ -11,9 +11,12 @@ help:
 
 build:
 	@docker build --tag=minaki/ros-kinetic:core core/.
+	@docker build --tag=minaki/ros-kinetic:core base/.
 
 pull:
 	@docker pull minaki/ros-kinetic:core
+	@docker pull minaki/ros-kinetic:base
 
 clean:
 	@docker rmi -f minaki/ros-kinetic:core
+	@docker rmi -f minaki/ros-kinetic:base
